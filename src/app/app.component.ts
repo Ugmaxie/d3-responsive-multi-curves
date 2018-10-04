@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-  mainView = true;
+  mainView = false;
 
   switchView(): void {
     this.mainView = !this.mainView;
