@@ -1,14 +1,8 @@
-.holder {
-  width: 90%;
-  padding-bottom: 29%;
-  position: relative;
-  margin: 15px auto;
-}
-
-.holder-inner {
+.switcher {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 6px;
+  right: 8%;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2;
 }

@@ -1,45 +1,13 @@
-<div style="text-align:center">
-  <h1>
-    VMWare d3 Test Task!
-  </h1>
-</div>
-
-<ul>
-  <li>
-    Draw a cubic bezier curve with endpoints in diagonal corners of a browser viewport and with arbitrary control points
-  </li>
-  <li>
-    Place N elements along the bezier curve. The elements should be equally spaced
-  </li>
-  <li>
-    Use a slider to set N from 1 to 100
-  </li>
-  <li>
-    Use a second slider to draw multiple similar curves from 1 to 100
-  </li>
-  <li>
-    The curves should redraw when the browser is resized and when the sliders are moved
-  </li>
-</ul>
-
 <div>
-  <label for="nCurve"
-         style="display: inline-block; width: 240px; text-align: right">
-    Curves <span id="nCurve-value"></span>
-  </label>
-  <input name="curves" type="range" min="1" max="100" id="nCurve">
-
-  <label for="nElement"
-         style="display: inline-block; width: 240px; text-align: right">
-    Elements <span id="nElement-value"></span>
-  </label>
-  <input name="points" type="range" min="2" max="102" id="nElement">
+  <div class="switcher" (click)="switchView()">
+    Switch View
+  </div>
 </div>
 
-<div class="holder">
-  <div class="holder-inner" id="svg-wrapper">
-    <svg preserveAspectRatio="xMidYMid meet">
-      <g></g>
-    </svg>
-  </div>
+<div *ngIf="mainView">
+  <app-main-view></app-main-view>
+</div>
+
+<div *ngIf="!mainView">
+  <app-optional-view></app-optional-view>
 </div>
