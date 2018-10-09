@@ -1,13 +1,29 @@
-<div>
-  <div class="switcher" (click)="switchView()">
+<div class="switcher">
+  <div (click)="switchView()">
     Switch View
+  </div>
+
+  <div class="clarified" (click)="switchToClarified()">
+    Clarified
+  </div>
+
+  <div class="clarified" (click)="switchExperimental()">
+    Experimental
   </div>
 </div>
 
-<div *ngIf="mainView">
+<div *ngIf="mainView && !clarified && !experimental">
   <app-main-view></app-main-view>
 </div>
 
-<div *ngIf="!mainView">
+<div *ngIf="!mainView && !clarified && !experimental">
   <app-optional-view></app-optional-view>
+</div>
+
+<div *ngIf="clarified && !experimental">
+  <app-clarified-view></app-clarified-view>
+</div>
+
+<div *ngIf="experimental && !clarified">
+  <app-experimental-view></app-experimental-view>
 </div>

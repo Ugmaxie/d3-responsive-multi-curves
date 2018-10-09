@@ -8,8 +8,22 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
   mainView = false;
+  clarified = true;
+  experimental = false;
 
   switchView(): void {
     this.mainView = !this.mainView;
+    this.clarified = false;
+    this.experimental = false;
+  }
+
+  switchToClarified(): void {
+    this.clarified = !this.clarified;
+    this.experimental = false;
+  }
+
+  switchExperimental(): void {
+    this.experimental = !this.experimental;
+    this.clarified = false;
   }
 }

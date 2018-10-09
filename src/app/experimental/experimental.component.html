@@ -1,0 +1,49 @@
+<div class="holder-super-wrapper">
+  <div class="holder-wrapper">
+    <div class="controls">
+      <div class="controls__row">
+        <div class="controls__col-left">
+          <div class="controls__text">
+            Curves:
+          </div>
+        </div>
+        <div class="controls__col-right">
+          <label for="nCurve">
+          </label>
+          <input name="curves" type="range" min="1" max="100" id="nCurve">
+        </div>
+        <div class="controls__value">
+          <div class="controls__text">
+            <span id="nCurve-value"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls__row">
+        <div class="controls__col-left">
+          <div class="controls__text">
+            Elements Experimental:
+          </div>
+        </div>
+        <div class="controls__col-right">
+          <label for="nElement">
+          </label>
+          <input name="points" type="range" min="3" max="102" id="nElement">
+        </div>
+        <div class="controls__value">
+          <div class="controls__text">
+            <span id="nElement-value"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="holder">
+      <div class="holder-inner" id="svg-wrapper">
+        <svg preserveAspectRatio="xMidYMid meet">
+          <g></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
