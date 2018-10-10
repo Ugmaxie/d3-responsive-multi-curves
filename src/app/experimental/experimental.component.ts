@@ -14,22 +14,22 @@ type PointElement = [number, number];
 let _this;
 
 @Component({
-  selector: 'app-optional-view',
-  templateUrl: './optional.component.html',
-  styleUrls: ['./optional.component.css']
+  selector: 'app-experimental-view',
+  templateUrl: './experimental.component.html',
+  styleUrls: ['./experimental.component.css']
 })
 
-export class OptionalComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ExperimentalComponent implements OnInit, AfterViewInit, OnDestroy {
   startEndPointsOffset = 5;
   wrapper: HTMLElement;
   viewportSize: PointElement;
   initialViewportSize: PointElement;
   curvesCollection = [];
-  numActivePoints = 3;
+  numActivePoints = 4;
   numActiveCurves = 1;
   lineGenerator = d3.line();
   categoryScale = d3.scaleOrdinal(d3.schemeCategory10);
-  drag = d3.drag();
+  // drag = d3.drag();
   value: string;
 
   constructor() {
@@ -41,18 +41,18 @@ export class OptionalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.viewportSize = [this.wrapper.clientWidth, this.wrapper.clientHeight];
     this.initialViewportSize = [this.wrapper.clientWidth, this.wrapper.clientHeight];
 
-    this.drag
-      .on('drag', (point: PointElement, pointIndex: number, collection: HTMLCollection) => {
-        const className = +(collection[pointIndex].classList[0].replace('curve-', ''));
-        if (pointIndex === 0 || pointIndex === this.curvesCollection[className].length - 1) {
-          return;
-        }
-
-        this.curvesCollection[className][pointIndex][0] = d3.event.x;
-        this.curvesCollection[className][pointIndex][1] = d3.event.y;
-        this.updateLines();
-        this.updatePoints();
-      });
+    // this.drag
+    //   .on('drag', (point: PointElement, pointIndex: number, collection: HTMLCollection) => {
+    //     const className = +(collection[pointIndex].classList[0].replace('curve-', ''));
+    //     if (pointIndex === 0 || pointIndex === this.curvesCollection[className].length - 1) {
+    //       return;
+    //     }
+    //
+    //     this.curvesCollection[className][pointIndex][0] = d3.event.x;
+    //     this.curvesCollection[className][pointIndex][1] = d3.event.y;
+    //     this.updateLines();
+    //     this.updatePoints();
+    //   });
 
     this.init();
   }
@@ -139,19 +139,25 @@ export class OptionalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   computePoints(numElements: number, curvePoints: PointElement[], xDiff: number, yDiff: number): PointElement[] {
-    const newElements = [];
+    // const newElements = [];
 
-    for (let i = 1; i <= (numElements - 2); i++) {
-      newElements.push([
-        xDiff * i,
-        yDiff * i
-      ]);
-    }
+    // for (let i = 1; i <= (numElements - 2); i++) {
+    //   newElements.push([
+    //     xDiff * i,
+    //     yDiff * i
+    //   ]);
+    // }
 
-    curvePoints.splice(1, curvePoints.length - 2);
-    curvePoints.splice(1, 0, ...newElements);
+    // curvePoints.splice(1, curvePoints.length - 2);
+    // curvePoints.splice(1, 0, ...newElements);
 
-    return curvePoints;
+    // console.log('ComputePoints:curvePoints::', curvePoints);
+    // console.log('ComputePoints:newElements::', newElements);
+
+
+    return [[5, 5], [this.viewportSize[0] / 2, 5], [5, this.viewportSize[1]], [this.viewportSize[0], this.viewportSize[1]] ];
+
+    // return curvePoints;
   }
 
   updateCurves(numCurves: number): void {
@@ -192,6 +198,8 @@ export class OptionalComponent implements OnInit, AfterViewInit, OnDestroy {
         clear: true
       });
 
+      console.log('curvePoints:::', curvePoints);
+
       this.lineGenerator.curve(curveOptions.curve);
       curveOptions.lineString = this.lineGenerator(curvePoints);
 
@@ -225,7 +233,7 @@ export class OptionalComponent implements OnInit, AfterViewInit, OnDestroy {
         .append('circle')
         .classed('curve-' + pointIndex, true)
         .attr('r', 4)
-        .call(this.drag)
+        // .call(this.drag)
         .merge(point)
         .style('fill', (element: PointElement, index: number) => {
           if (index === 0 || index === this.numActivePoints - 1) {

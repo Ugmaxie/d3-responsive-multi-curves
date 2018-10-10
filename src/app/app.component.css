@@ -1,8 +1,13 @@
 .switcher {
   position: absolute;
+  display: flex;
   top: 6px;
   right: 8%;
   font-weight: 700;
   cursor: pointer;
   z-index: 2;
+}
+
+.clarified {
+  padding-left: 10px;
 }
