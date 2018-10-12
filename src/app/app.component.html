@@ -1,10 +1,18 @@
 <div class="switcher">
-  <div (click)="switchView()">
-    Switch View
-  </div>
+  <!--<div (click)="switchView()">-->
+    <!--Switch View-->
+  <!--</div>-->
 
-  <div class="clarified" (click)="switchToClarified()">
-    Clarified
+  <!--<div class="clarified" (click)="switchToClarified()">-->
+    <!--Clarified-->
+  <!--</div>-->
+
+  <div class="clarified" (click)="switchPerfomance()">
+      Switch performance (
+    <span class="performance-value"
+          [ngClass]="{'low' : isAfterViewChecked, 'high': !isAfterViewChecked }">
+      {{performanceValue}}
+    </span> )
   </div>
 </div>
 
@@ -17,5 +25,5 @@
 </div>
 
 <div *ngIf="clarified">
-  <app-clarified-view></app-clarified-view>
+  <app-clarified-view [isAfterViewChecked]="isAfterViewChecked"></app-clarified-view>
 </div>
