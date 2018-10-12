@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, HostListener, Inject, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, HostListener, Inject, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { Curve } from './curve';
@@ -10,9 +10,13 @@ import { Curve } from './curve';
 })
 
 export class ClarifiedComponent implements OnInit, AfterViewChecked {
-  wrapper;
-  viewportSize;
+  @Input()isAfterViewChecked = true;
 
+  wrapper: HTMLElement;
+  viewportSize: number[];
+  numActivePoints = 10;
+  numActiveCurves = 1;
+  newChart = new Curve();
   curveOptions = {
     viewport: {
       width: 500,
@@ -25,10 +29,6 @@ export class ClarifiedComponent implements OnInit, AfterViewChecked {
       left: 10
     }
   };
-
-  numActivePoints = 10;
-  numActiveCurves = 1;
-  newChart = new Curve();
 
   private resizer = new Subject();
   @HostListener('window:resize')
@@ -47,20 +47,24 @@ export class ClarifiedComponent implements OnInit, AfterViewChecked {
     this.newChart.draw(this.numActivePoints, this.numActiveCurves, this.curveOptions);
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewChecked(): void {
+    if (!this.isAfterViewChecked) {
+      return;
+    }
+
     this.resizeChart();
   }
 
-  updateCurve() {
+  updateCurve(): void {
     this.newChart.update(this.numActivePoints, this.numActiveCurves, this.curveOptions);
   }
 
-  resizeChart() {
+  resizeChart(): void {
     this.getViewportSize();
     this.newChart.update(this.numActivePoints, this.numActiveCurves, this.curveOptions);
   }
 
-  getViewportSize() {
+  getViewportSize(): void {
     this.wrapper = document.getElementById('svg-wrapper');
     this.viewportSize = [this.wrapper.clientWidth, this.wrapper.clientHeight];
 

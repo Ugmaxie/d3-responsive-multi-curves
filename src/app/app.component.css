@@ -11,3 +11,16 @@
 .clarified {
   padding-left: 10px;
 }
+
+.performance-value {
+  width: 26px;
+  display: inline-flex;
+}
+
+.high {
+  color: #ff7d5b;
+}
+
+.low {
+  color: #4d753d;
+}
