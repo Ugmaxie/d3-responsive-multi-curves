@@ -14,36 +14,37 @@ export class ClarifiedComponent implements OnInit, AfterViewChecked {
   viewportSize;
 
   curveOptions = {
-    dimentions: {
+    viewport: {
       width: 500,
       height: 300
     },
     padding : {
-      top: 10,
+      top: 15,
       right: 10,
       bottom: 10,
       left: 10
     }
   };
 
-  elementsCount = 10;
+  numActivePoints = 10;
+  numActiveCurves = 1;
   newChart = new Curve();
+
   private resizer = new Subject();
   @HostListener('window:resize')
   function () {
     this.resizer.next();
   }
 
-  constructor(@Inject(ElementRef) private _elementRef: ElementRef) {
-  }
-
   ngOnInit(): void {
+    this.getViewportSize();
+
     this.resizer
       .subscribe(() => {
         this.resizeChart();
       });
 
-    this.newChart.draw(this.elementsCount, this.curveOptions);
+    this.newChart.draw(this.numActivePoints, this.numActiveCurves, this.curveOptions);
   }
 
   ngAfterViewChecked() {
@@ -51,10 +52,15 @@ export class ClarifiedComponent implements OnInit, AfterViewChecked {
   }
 
   updateCurve() {
-    this.newChart.update(this.elementsCount, this.curveOptions);
+    this.newChart.update(this.numActivePoints, this.numActiveCurves, this.curveOptions);
   }
 
   resizeChart() {
+    this.getViewportSize();
+    this.newChart.update(this.numActivePoints, this.numActiveCurves, this.curveOptions);
+  }
+
+  getViewportSize() {
     this.wrapper = document.getElementById('svg-wrapper');
     this.viewportSize = [this.wrapper.clientWidth, this.wrapper.clientHeight];
 
@@ -69,13 +75,11 @@ export class ClarifiedComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    if (this.curveOptions.dimentions.height === height && this.curveOptions.dimentions.width === width) {
+    if (this.curveOptions.viewport.height === height && this.curveOptions.viewport.width === width) {
       return;
     }
 
-    this.curveOptions.dimentions.height = height;
-    this.curveOptions.dimentions.width = width;
-
-    this.newChart.update(this.elementsCount, this.curveOptions);
+    this.curveOptions.viewport.height = height;
+    this.curveOptions.viewport.width = width;
   }
 }
