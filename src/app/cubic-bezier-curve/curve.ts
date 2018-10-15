@@ -33,6 +33,112 @@ export class Curve {
     this.drawCubic(elementsCount, curvesCount, options);
   }
 
+  drawCubic(elementsCount, curvesCount, options): void {
+    const offsetX = options.padding.left;
+    const offsetY = options.padding.top;
+    const width = options.viewport.width - offsetX * 2;
+    const height = options.viewport.height - offsetY * 2;
+
+    for (let ac = this.curvesCollection.length; ac < curvesCount; ac++) {
+      this.curvesCollection[ac] = {
+        start: [0, 0],
+        end: [width, height],
+        control1: this.generateControlPoints(width, height, ac).c1,
+        control2: this.generateControlPoints(width, height, ac).c2
+      };
+    }
+
+    if (curvesCount < this.curvesCollection.length) {
+      for (let rc = this.curvesCollection.length; rc > curvesCount; rc--) {
+        this.curvesCollection.pop();
+      }
+    }
+
+    this.curvesCollection.map(dataset => {
+      if (dataset.end[0] === width && dataset.end[1] === height) {
+        return;
+      }
+
+      const getDeltaX = Math.abs(width - dataset.end[0]);
+      const getDeltaY = Math.abs(height - dataset.end[1]);
+
+      dataset.control2[0] = dataset.end[0] > width ? dataset.control2[0] - getDeltaX : dataset.control2[0] + getDeltaX;
+      dataset.control2[1] = dataset.end[1] > height ? dataset.control2[1] - getDeltaY : dataset.control2[1] + getDeltaY;
+
+      dataset.end[0] = width;
+      dataset.end[1] = height;
+    });
+
+    this.drawLine(elementsCount);
+    this.drawPoints(elementsCount);
+  }
+
+  drawLine(elementsCount) {
+    const curves = this.curvesCollection.map((curvesDataset, curveIndex) => {
+      const curveOptions = Object.assign({}, {
+        curve: curveNatural,
+        lineString: '',
+        clear: true
+      });
+
+      this.arcLengthParam(curvesDataset, elementsCount, curveIndex);
+
+      curveOptions.lineString = this.cubicPath(curvesDataset);
+
+      return curveOptions;
+    });
+
+    const line = select('svg g')
+      .selectAll('path')
+      .data(curves);
+
+    line.enter()
+      .append('path')
+      .merge(line)
+      .style('stroke', (curve: CurveOptions, lineIndex: number) => this.colorScale(lineIndex))
+      .attr('d', (curve: CurveOptions) => curve.lineString);
+
+    line.exit().remove();
+
+    return line;
+  }
+
+  drawPoints(elementsCount): void {
+    this.g
+      .selectAll('circle')
+      .remove();
+
+    this.curvesCollection.forEach((curvePoints, curveIndex) => {
+      const interpolatedPoints = this.interpolatePoints((elementsCount - 1), curvePoints, this.arcLengthsByCurves[curveIndex]);
+      const points = this.g
+        .selectAll('circle.interpolated-point' + curveIndex)
+        .data(interpolatedPoints);
+
+      points.enter()
+        .append('circle')
+        .merge(points)
+        .attr('class', 'interpolated-point' + curveIndex)
+        .attr('r', (d, i) => {
+          if (i === 0 || i === elementsCount - 1) {
+            return 3;
+          }
+
+          return 5;
+        })
+        .style('fill', (d, i) => {
+          if (i === 0 || i === elementsCount - 1) {
+            return 'black';
+          }
+
+          return;
+        })
+        .attr('cx', d => d[0])
+        .attr('cy', d => d[1]);
+
+      points.exit().remove();
+    });
+  }
+
   cubicPath(c): string {
     return `M${c.start[0]},${c.start[1]} C${c.control1[0]},${c.control1[1]} ${c.control2[0]},${c.control2[1]} ${c.end[0]},${c.end[1]}`;
   }
@@ -97,8 +203,8 @@ export class Curve {
     let clen = 0;
 
     for (let i = 1; i <= dotsNumber; i++) {
-      const x = this.getX(i / dotsNumber, cubic);
-      const y = this.getY(i / dotsNumber, cubic);
+      const x = this.getX(i / (dotsNumber - 1), cubic);
+      const y = this.getY(i / (dotsNumber - 1), cubic);
 
       const dx = ox - x;
       const dy = oy - y;
@@ -139,77 +245,6 @@ export class Curve {
     return {c1, c2};
   }
 
-  drawLine(elementsCount) {
-    const curves = this.curvesCollection.map((curvesDataset, curveIndex) => {
-      const curveOptions = Object.assign({}, {
-        name: 'curveNatural',
-        curve: curveNatural,
-        lineString: '',
-        clear: true
-      });
-
-      this.arcLengthParam(curvesDataset, elementsCount, curveIndex);
-
-      curveOptions.lineString = this.cubicPath(curvesDataset);
-
-      return curveOptions;
-    });
-
-    const line = select('svg g')
-      .selectAll('path')
-      .data(curves);
-
-    line.enter()
-      .append('path')
-      .merge(line)
-      .style('stroke', (curve: CurveOptions, lineIndex: number) => this.colorScale(lineIndex))
-      .attr('d', (curve: CurveOptions) => curve.lineString);
-
-    line.exit().remove();
-
-    return line;
-  }
-
-  drawCubic(elementsCount, curvesCount, options): void {
-    const offsetX = options.padding.left;
-    const offsetY = options.padding.top;
-    const width = options.viewport.width - offsetX * 2;
-    const height = options.viewport.height - offsetY * 2;
-
-    for (let ac = this.curvesCollection.length; ac < curvesCount; ac++) {
-      this.curvesCollection[ac] = {
-        start: [0, 0],
-        end: [width, height],
-        control1: this.generateControlPoints(width, height, ac).c1,
-        control2: this.generateControlPoints(width, height, ac).c2
-      };
-    }
-
-    if (curvesCount < this.curvesCollection.length) {
-      for (let rc = this.curvesCollection.length; rc > curvesCount; rc--) {
-        this.curvesCollection.pop();
-      }
-    }
-
-    this.curvesCollection.map(dataset => {
-      if (dataset.end[0] === width && dataset.end[1] === height) {
-        return;
-      }
-
-      const getDeltaX = Math.abs(width - dataset.end[0]);
-      const getDeltaY = Math.abs(height - dataset.end[1]);
-
-      dataset.control2[0] = dataset.end[0] > width ? dataset.control2[0] - getDeltaX : dataset.control2[0] + getDeltaX;
-      dataset.control2[1] = dataset.end[1] > height ? dataset.control2[1] - getDeltaY : dataset.control2[1] + getDeltaY;
-
-      dataset.end[0] = width;
-      dataset.end[1] = height;
-    });
-
-    this.drawLine(elementsCount);
-    this.drawPoints(elementsCount);
-  }
-
   interpolatePoints(dotsNumber, cubic, arcLengths): number[] {
     const points = [];
 
@@ -221,42 +256,6 @@ export class Curve {
     }
 
     return points;
-  }
-
-  drawPoints(elementsCount): void {
-    this.g
-      .selectAll('circle')
-      .remove();
-
-    this.curvesCollection.forEach((curvePoints, curveIndex) => {
-      const interpolatedPoints = this.interpolatePoints((elementsCount - 1), curvePoints, this.arcLengthsByCurves[curveIndex]);
-      const points = this.g
-        .selectAll('circle.interpolated-point' + curveIndex)
-        .data(interpolatedPoints);
-
-      points.enter()
-        .append('circle')
-        .merge(points)
-        .attr('class', 'interpolated-point' + curveIndex)
-        .attr('r', (d, i) => {
-          if (i === 0 || i === elementsCount - 1) {
-            return 3;
-          }
-
-          return 5;
-        })
-        .style('fill', (d, i) => {
-          if (i === 0 || i === elementsCount - 1) {
-            return 'black';
-          }
-
-          return;
-        })
-        .attr('cx', d => d[0])
-        .attr('cy', d => d[1]);
-
-      points.exit().remove();
-    });
   }
 
   colorScale(curveIndex: number): string {

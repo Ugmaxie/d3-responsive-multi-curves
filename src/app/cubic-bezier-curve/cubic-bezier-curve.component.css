@@ -80,34 +80,3 @@ input[type=range]::-webkit-slider-thumb {
 input[type=range]:focus::-webkit-slider-runnable-track {
   background: #2497E3;
 }
-
-
-
-.start-point {
-  fill: #fff;
-  stroke: #0bb;
-}
-
-.end-point {
-  fill: #fff;
-  stroke: #0bb;
-}
-
-.control-point {
-  fill: tomato;
-}
-
-.curve {
-  fill: none;
-  stroke: #0bb;
-  stroke-width: 2px;
-}
-
-.interpolated-point {
-  fill: #077;
-}
-
-.rotated-point {
-  fill: #af84e6;
-  stroke: #660cd0;
-}
