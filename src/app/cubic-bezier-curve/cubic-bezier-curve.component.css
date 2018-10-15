@@ -1,32 +1,17 @@
-.holder-super-wrapper {
-  padding: 24px;
-  background: #f8fafd;
-}
-
-.holder-wrapper {
-  padding: 16px;
-  background: white;
-  border: 1px solid #dadada;
-  border-radius: 4px;
-}
-
-.holder {
-  width: 100%;
-  padding-bottom: 42%;
-  position: relative;
-}
-
 .holder-inner {
   position: absolute;
-  top: 0;
+  top: -5px;
   left: 0;
   width: 100%;
   height: 100%;
 }
 
 .controls {
-  padding: 8px;
-  background-color: #efeff6;
+  position: absolute;
+  width: 300px;
+  top: 48px;
+  right: 36px;
+  z-index: 1;
 }
 
 .controls__row {

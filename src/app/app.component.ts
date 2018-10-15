@@ -7,22 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class AppComponent implements OnInit {
-  mainView = false;
-  clarified = true;
   isAfterViewChecked = true;
   performanceValue = '';
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setPerformanceValue(this.isAfterViewChecked);
-  }
-
-  switchView(): void {
-    this.mainView = !this.mainView;
-    this.clarified = false;
-  }
-
-  switchToClarified(): void {
-    this.clarified = !this.clarified;
   }
 
   switchPerfomance(): void {
@@ -31,7 +20,7 @@ export class AppComponent implements OnInit {
     this.setPerformanceValue(this.isAfterViewChecked);
   }
 
-  setPerformanceValue(trigger: boolean) {
+  setPerformanceValue(trigger: boolean): void {
     this.performanceValue = trigger ? 'Low' : 'High';
   }
 }

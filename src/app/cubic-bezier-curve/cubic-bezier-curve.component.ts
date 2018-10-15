@@ -1,15 +1,15 @@
-import { AfterViewChecked, Component, ElementRef, HostListener, Inject, Input, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, HostListener, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { Curve } from './curve';
 
 @Component({
-  selector: 'app-clarified-view',
-  templateUrl: './clarified.component.html',
-  styleUrls: ['./clarified.component.css']
+  selector: 'app-cubic-bezier-curve-view',
+  templateUrl: './cubic-bezier-curve.component.html',
+  styleUrls: ['./cubic-bezier-curve.component.css']
 })
 
-export class ClarifiedComponent implements OnInit, AfterViewChecked {
+export class CubicBezierCurveComponent implements OnInit, AfterViewChecked {
   @Input()isAfterViewChecked = true;
 
   wrapper: HTMLElement;
@@ -85,5 +85,7 @@ export class ClarifiedComponent implements OnInit, AfterViewChecked {
 
     this.curveOptions.viewport.height = height;
     this.curveOptions.viewport.width = width;
+
+    console.log(this.wrapper);
   }
 }
