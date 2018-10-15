@@ -1,12 +1,4 @@
 <div class="switcher">
-  <!--<div (click)="switchView()">-->
-    <!--Switch View-->
-  <!--</div>-->
-
-  <!--<div class="clarified" (click)="switchToClarified()">-->
-    <!--Clarified-->
-  <!--</div>-->
-
   <div class="clarified" (click)="switchPerfomance()">
       Switch performance (
     <span class="performance-value"
@@ -16,14 +8,6 @@
   </div>
 </div>
 
-<div *ngIf="mainView && !clarified">
-  <app-main-view></app-main-view>
-</div>
-
-<div *ngIf="!mainView && !clarified">
-  <app-optional-view></app-optional-view>
-</div>
-
-<div *ngIf="clarified">
-  <app-clarified-view [isAfterViewChecked]="isAfterViewChecked"></app-clarified-view>
+<div>
+  <app-cubic-bezier-curve-view [isAfterViewChecked]="isAfterViewChecked"></app-cubic-bezier-curve-view>
 </div>

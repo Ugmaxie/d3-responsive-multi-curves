@@ -1,15 +1,25 @@
-import * as d3 from 'd3';
-import { CurveOptions } from 'src/app/optional/optional.component';
+import { select } from 'd3-selection';
+import { scaleOrdinal } from 'd3-scale';
+import { schemeCategory10 } from 'd3-scale-chromatic';
+import { CurveFactory, curveNatural } from 'd3-shape';
+
+export interface CurveOptions {
+  name: string;
+  curve: CurveFactory;
+  active: boolean;
+  lineString: string;
+  clear: boolean;
+}
 
 export class Curve {
   svg: any;
   g: any;
-  arcLengthsByCurves: any[] = [];
-  categoryScale = d3.scaleOrdinal(d3.schemeCategory10);
+  arcLengthsByCurves: number[][] = [];
+  categoryScale = scaleOrdinal(schemeCategory10);
   curvesCollection = [];
 
-  draw(elementsCount, curvesCount, options): void {
-    this.svg = d3.select('#svg-wrapper').append('svg')
+  draw(elementsCount = 3, curvesCount, options): void {
+    this.svg = select('#svg-wrapper').append('svg')
       .attr('width', options.viewport.width)
       .attr('height', options.viewport.height);
 
@@ -19,7 +29,7 @@ export class Curve {
     this.drawCubic(elementsCount, curvesCount, options);
   }
 
-  update(elementsCount, curvesCount, options): void {
+  update(elementsCount = 3, curvesCount, options): void {
     this.drawCubic(elementsCount, curvesCount, options);
   }
 
@@ -102,7 +112,7 @@ export class Curve {
     }
   }
 
-  generateControlPoints(width, height, index) {
+  generateControlPoints(width, height, index): { c1: number[], c2: number[] } {
     let c1 = [0, 0];
     let c2 = [0, 0];
 
@@ -130,22 +140,22 @@ export class Curve {
   }
 
   drawLine(elementsCount) {
-    const curves = this.curvesCollection.map((dataset, index) => {
+    const curves = this.curvesCollection.map((curvesDataset, curveIndex) => {
       const curveOptions = Object.assign({}, {
         name: 'curveNatural',
-        curve: d3.curveNatural,
+        curve: curveNatural,
         lineString: '',
         clear: true
       });
 
-      this.arcLengthParam(dataset, elementsCount, index);
+      this.arcLengthParam(curvesDataset, elementsCount, curveIndex);
 
-      curveOptions.lineString = this.cubicPath(dataset);
+      curveOptions.lineString = this.cubicPath(curvesDataset);
 
       return curveOptions;
     });
 
-    const line = d3.select('svg g')
+    const line = select('svg g')
       .selectAll('path')
       .data(curves);
 
@@ -161,20 +171,18 @@ export class Curve {
   }
 
   drawCubic(elementsCount, curvesCount, options): void {
-    console.log('draw Cubic');
     const offsetX = options.padding.left;
     const offsetY = options.padding.top;
     const width = options.viewport.width - offsetX * 2;
     const height = options.viewport.height - offsetY * 2;
 
     for (let ac = this.curvesCollection.length; ac < curvesCount; ac++) {
-      const cubic = {
+      this.curvesCollection[ac] = {
         start: [0, 0],
         end: [width, height],
         control1: this.generateControlPoints(width, height, ac).c1,
         control2: this.generateControlPoints(width, height, ac).c2
       };
-      this.curvesCollection.push(cubic);
     }
 
     if (curvesCount < this.curvesCollection.length) {
@@ -206,12 +214,10 @@ export class Curve {
     const points = [];
 
     for (let i = 0; i <= dotsNumber; i++) {
-      const nextPoint = [
+      points[i] = [
         this.mx(i / dotsNumber, dotsNumber, cubic, arcLengths),
         this.my(i / dotsNumber, dotsNumber, cubic, arcLengths)
       ];
-
-      points.push(nextPoint);
     }
 
     return points;
