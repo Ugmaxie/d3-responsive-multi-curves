@@ -1,5 +1,13 @@
 <div class="switcher">
-  <div class="clarified" (click)="switchPerfomance()">
+  <div class="draw-switch" (click)="switchDraw()">
+    Draw
+    <span class="performance-value"
+          [ngClass]="{'canvas' : isCanvas, 'svg': !isCanvas }">
+      {{drawValue}}
+    </span>
+  </div>
+
+  <div class="performance-switch" (click)="switchPerfomance()">
       Switch performance (
     <span class="performance-value"
           [ngClass]="{'low' : isAfterViewChecked, 'high': !isAfterViewChecked }">
@@ -9,5 +17,13 @@
 </div>
 
 <div>
-  <app-cubic-bezier-curve-view [isAfterViewChecked]="isAfterViewChecked"></app-cubic-bezier-curve-view>
+  <app-cubic-bezier-curve-view
+    *ngIf="!isCanvas"
+    [isAfterViewChecked]="isAfterViewChecked"></app-cubic-bezier-curve-view>
+</div>
+
+<div>
+  <app-cubic-bezier-curve-canvas-view
+    *ngIf="isCanvas"
+    [isAfterViewChecked]="isAfterViewChecked"></app-cubic-bezier-curve-canvas-view>
 </div>

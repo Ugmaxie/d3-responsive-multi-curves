@@ -18,7 +18,15 @@ export class Curve {
   categoryScale = scaleOrdinal(schemeCategory10);
   curvesCollection = [];
 
+  // context: any;
+
   draw(elementsCount = 3, curvesCount, options): void {
+    //
+    // const canvas: any = document.getElementById('canvas');
+    // canvas.width = options.viewport.width;
+    // canvas.height = options.viewport.height;
+    // this.context = canvas.getContext('2d');
+
     this.svg = select('#svg-wrapper').append('svg')
       .attr('width', options.viewport.width)
       .attr('height', options.viewport.height);
@@ -30,6 +38,8 @@ export class Curve {
   }
 
   update(elementsCount = 3, curvesCount, options): void {
+    // this.context.clearRect(0, 0, options.viewport.width, options.viewport.height);
+
     this.drawCubic(elementsCount, curvesCount, options);
   }
 
@@ -73,8 +83,53 @@ export class Curve {
     this.drawPoints(elementsCount);
   }
 
+//   drawCanvas(curvePoints, i) {
+//     // const canvas: any = document.getElementById('canvas');
+//     // const context = canvas.getContext('2d');
+//
+// //  Define the Points as {x,y}
+//     const start = { x: curvePoints.start[0] + 10,    y: curvePoints.start[1] + 10 };
+//     const cp1 = { x: curvePoints.control1[0] + 10,    y: curvePoints.control1[1] + 10 };
+//     const cp2 = { x: curvePoints.control2[0] + 10,    y: curvePoints.control2[1] + 10 };
+//     const end = { x: curvePoints.end[0] + 10,    y: curvePoints.end[1] + 10 };
+//
+// //  Draw Curve
+//     this.context.beginPath();
+//     this.context.moveTo(start.x, start.y);
+//     this.context.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y);
+//     this.context.strokeStyle = this.colorScale(i);
+//     this.context.lineWidth = 1;
+//     this.context.stroke();
+//     this.context.closePath();
+//
+// //  Draw Start End Points
+//     this.context.beginPath();
+//     this.context.arc(curvePoints.start[0] + 10, curvePoints.start[1] + 10, 3, 0, 360);
+//     this.context.arc(curvePoints.end[0] + 10, curvePoints.end[1] + 10, 3, 0, 360);
+//     this.context.fill();
+//
+//     this.context.closePath();
+//     // context.clearRect();
+//   }
+
+  // drawCanvasInterpolatedPoints(dataset) {
+  //   // const canvas: any = document.getElementById('canvas');
+  //   // const context = canvas.getContext('2d');
+  //
+  //   dataset.forEach(pointCoordinates => {
+  //     this.context.beginPath();
+  //     this.context.arc(pointCoordinates[0] + 10, pointCoordinates[1] + 10, 4, 0, 360);
+  //     this.context.strokeStyle = 'grey';
+  //     this.context.stroke();
+  //     this.context.closePath();
+  //   });
+  // }
+
   drawLine(elementsCount) {
     const curves = this.curvesCollection.map((curvesDataset, curveIndex) => {
+
+      // this.drawCanvas(curvesDataset, curveIndex);
+
       const curveOptions = Object.assign({}, {
         curve: curveNatural,
         lineString: '',
@@ -113,6 +168,8 @@ export class Curve {
       const points = this.g
         .selectAll('circle.interpolated-point' + curveIndex)
         .data(interpolatedPoints);
+
+      // this.drawCanvasInterpolatedPoints(interpolatedPoints);
 
       points.enter()
         .append('circle')

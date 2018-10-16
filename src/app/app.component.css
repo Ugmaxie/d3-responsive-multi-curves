@@ -8,7 +8,11 @@
   z-index: 2;
 }
 
-.clarified {
+.draw-switch {
+  padding: 0 10px;
+}
+
+.performance-switch {
   padding-left: 10px;
 }
 

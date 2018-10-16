@@ -10,8 +10,12 @@ export class AppComponent implements OnInit {
   isAfterViewChecked = true;
   performanceValue = '';
 
+  isCanvas = false;
+  drawValue = '';
+
   ngOnInit(): void {
     this.setPerformanceValue(this.isAfterViewChecked);
+    this.setCanvasValue(this.isCanvas);
   }
 
   switchPerfomance(): void {
@@ -22,5 +26,15 @@ export class AppComponent implements OnInit {
 
   setPerformanceValue(trigger: boolean): void {
     this.performanceValue = trigger ? 'Low' : 'High';
+  }
+
+  switchDraw(): void {
+    this.isCanvas = !this.isCanvas;
+
+    this.setCanvasValue(this.isCanvas);
+  }
+
+  setCanvasValue(trigger: boolean): void {
+    this.drawValue = trigger ? 'Canvas' : 'SVG';
   }
 }
