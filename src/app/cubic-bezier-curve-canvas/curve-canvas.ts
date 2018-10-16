@@ -100,18 +100,22 @@ export class CurveCanvas {
 
 //  Draw Start End Points
     this.context.beginPath();
-    this.context.arc(curvePoints.start[0] + 10, curvePoints.start[1] + 10, 3, 0, 360);
-    this.context.arc(curvePoints.end[0] + 10, curvePoints.end[1] + 10, 3, 0, 360);
+    this.context.arc(curvePoints.start[0] + 10, curvePoints.start[1] + 10, 3, 0, 2 * Math.PI, true);
+    this.context.arc(curvePoints.end[0] + 10, curvePoints.end[1] + 10, 3, 0, 2 * Math.PI, true);
+    this.context.fillStyle = 'black';
     this.context.fill();
-
     this.context.closePath();
   }
 
   drawCanvasInterpolatedPoints(pointsDataset: number[]): void {
-    pointsDataset.forEach(pointCoordinates => {
+    pointsDataset
+      .filter((point, pointIndex) => pointIndex !== 0 && pointIndex !== pointsDataset.length - 1)
+      .forEach(pointCoordinates => {
       this.context.beginPath();
-      this.context.arc(pointCoordinates[0] + 10, pointCoordinates[1] + 10, 4, 0, 360);
+      this.context.arc(pointCoordinates[0] + 10, pointCoordinates[1] + 10, 4, 0, 2 * Math.PI, true);
       this.context.strokeStyle = 'grey';
+      this.context.fillStyle = 'white';
+      this.context.fill();
       this.context.stroke();
       this.context.closePath();
     });
