@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { CubicBezierCurveComponent } from './cubic-bezier-curve/cubic-bezier-curve.component';
+import { CubicBezierCurveCanvasComponent } from './cubic-bezier-curve-canvas/cubic-bezier-curve-canvas.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CubicBezierCurveComponent
+    CubicBezierCurveComponent,
+    CubicBezierCurveCanvasComponent
   ],
   imports: [
     BrowserModule,

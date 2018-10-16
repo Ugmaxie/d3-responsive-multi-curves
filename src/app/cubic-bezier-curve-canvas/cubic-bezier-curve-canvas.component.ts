@@ -1,28 +1,27 @@
 import { AfterViewChecked, Component, HostListener, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-
-import { Curve } from './curve';
+import { CurveCanvas } from './curve-canvas';
 
 @Component({
-  selector: 'app-cubic-bezier-curve-view',
-  templateUrl: './cubic-bezier-curve.component.html',
-  styleUrls: ['./cubic-bezier-curve.component.css']
+  selector: 'app-cubic-bezier-curve-canvas-view',
+  templateUrl: './cubic-bezier-curve-canvas.component.html',
+  styleUrls: ['./cubic-bezier-curve-canvas.component.css']
 })
 
-export class CubicBezierCurveComponent implements OnInit, AfterViewChecked {
+export class CubicBezierCurveCanvasComponent implements OnInit, AfterViewChecked {
   @Input()isAfterViewChecked = true;
 
   wrapper: HTMLElement;
   viewportSize: number[];
   numActivePoints = 10;
   numActiveCurves = 1;
-  newChart = new Curve();
+  newChart = new CurveCanvas();
   curveOptions = {
     viewport: {
       width: 500,
       height: 300
     },
-    padding : {
+    padding: {
       top: 15,
       right: 10,
       bottom: 10,
